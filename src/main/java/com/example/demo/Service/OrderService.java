@@ -1,6 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.Model.ModelRequest.OrderRequest;
+import com.example.demo.Model.ModelUPdateRequest.OrderUpdateRequest;
 import com.example.demo.Model.Order;
 
 import java.util.List;
@@ -14,5 +15,7 @@ public interface OrderService {
 
     List<Order> getListOfOrderByRestaurantId(Integer restaurantId);
 
-//    List<Order> getOrderListByRestaurantId(int restaurantId);
+    Order updateOrderStatus(OrderUpdateRequest orderUpdateRequest);
+   Order getOrderById(Integer orderId);
+    Order getOrderByCustomerId(Integer orderId);
 }

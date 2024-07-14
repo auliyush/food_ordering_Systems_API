@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Model.FoodItem;
 import com.example.demo.Model.ModelRequest.RestaurantRequest;
+import com.example.demo.Model.ModelUPdateRequest.RestaurantUpdateRequest;
 import com.example.demo.Model.Order;
 import com.example.demo.Model.Restaurant;
 
@@ -18,4 +19,6 @@ public interface RestaurantService {
    List<Restaurant> getAllRestaurant();
 
     void saveRestaurantUpdates(Restaurant restaurantById);
+
+    Restaurant updateRestaurant(RestaurantUpdateRequest restaurantUpdateRequest);
 }

@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 import com.example.demo.Model.FoodItem;
 import com.example.demo.Model.ModelRequest.RestaurantRequest;
+import com.example.demo.Model.ModelUPdateRequest.RestaurantUpdateRequest;
 import com.example.demo.Model.Order;
 import com.example.demo.Model.Restaurant;
 import com.example.demo.Service.RestaurantService;
@@ -20,6 +21,10 @@ public class RestaurantController {
     @PostMapping("/create/restaurant")
     public Restaurant addRestaurant(@RequestBody RestaurantRequest restaurantRequest){
         return restaurantService.addRestaurant(restaurantRequest);
+    }
+    @PutMapping("/update/restaurant")
+    public Restaurant updateRestaurant(@RequestBody RestaurantUpdateRequest restaurantUpdateRequest){
+        return restaurantService.updateRestaurant(restaurantUpdateRequest);
     }
     @GetMapping("/get/restaurantBy/Id")
     public Restaurant getRestaurantById(@RequestParam Integer restaurantId){

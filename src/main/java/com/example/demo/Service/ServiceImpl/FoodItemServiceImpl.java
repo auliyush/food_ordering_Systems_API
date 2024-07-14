@@ -5,10 +5,11 @@ import com.example.demo.Model.ModelDeleteRequest.FoodItemDeleteRequest;
 import com.example.demo.Model.ModelRequest.FoodItemRequest;
 import com.example.demo.Model.ModelUPdateRequest.FoodItemUpdateRequest;
 import com.example.demo.Model.Restaurant;
+import com.example.demo.Model.User;
 import com.example.demo.Repository.FoodItemRepository;
 import com.example.demo.Service.FoodItemService;
 import com.example.demo.Service.RestaurantService;
-import jakarta.persistence.ElementCollection;
+import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,21 +22,31 @@ public class FoodItemServiceImpl implements FoodItemService {
     private FoodItemRepository foodItemRepository;
     @Autowired
     private RestaurantService restaurantService;
+    @Autowired
+    private UserService userService;
     @Override
     public FoodItem addFoodItem(FoodItemRequest foodItemRequest) {
-        Restaurant restaurant = restaurantService.getRestaurantById(foodItemRequest.getRestaurantId());
-        if(restaurant != null){
-            FoodItem foodItem = new FoodItem();
-            foodItem.setRestaurantId(foodItemRequest.getRestaurantId());
-            foodItem.setFoodName(foodItemRequest.getFoodName());
-            foodItem.setFoodPrice(foodItemRequest.getFoodPrice());
-            foodItem.setFoodDescription(foodItemRequest.getFoodDescription());
-            foodItem.setFoodAvailability(true);
-            restaurant.getFoodItems().add(foodItem);
-            return foodItemRepository.save(foodItem);
-        }else {
-            return null;
+        Optional<User> user = userService.findById(foodItemRequest.getOwnerId());
+        if(user.isPresent()){
+            if(user.get().getUserRole().equalsIgnoreCase("owner")){
+                Restaurant restaurant = restaurantService.getRestaurantById(foodItemRequest.getRestaurantId());
+                if(restaurant != null){
+                    if(restaurant.getOwnerId().equals(user.get().getId())){
+                        FoodItem foodItem = new FoodItem();
+                        foodItem.setRestaurantId(foodItemRequest.getRestaurantId());
+                        foodItem.setFoodName(foodItemRequest.getFoodName());
+                        foodItem.setFoodPrice(foodItemRequest.getFoodPrice());
+                        foodItem.setFoodDescription(foodItemRequest.getFoodDescription());
+                        foodItem.setFoodAvailability(true);
+                        restaurant.getFoodItems().add(foodItem);
+                        return foodItemRepository.save(foodItem);
+                    }
+                }else {
+                    return null;
+                }
+            }
         }
+        return null;
     }
     @Override
     public FoodItem updateFoodItem(FoodItemUpdateRequest foodItemUpdateRequest) {
@@ -84,11 +95,6 @@ public class FoodItemServiceImpl implements FoodItemService {
 
     @Override
     public List<FoodItem> getListOfFoodItem(Integer restaurantId) {
-//        if(restaurantService.getRestaurantById(restaurantId) != null){
-//            return foodItemRepository.findAllByRestaurantId(restaurantId);
-//        }else {
-//            return null;
-//        }
         return restaurantService.getRestaurantById(restaurantId).getFoodItems();
     }
 }

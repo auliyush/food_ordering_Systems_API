@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Model.ModelRequest.UserRequest;
+import com.example.demo.Model.ModelUPdateRequest.UserUpdateRequest;
 import com.example.demo.Model.User;
 import com.example.demo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,11 @@ public class UserController {
     public User signIn(@RequestParam String userEmail, String userPassword) {
         return userService.signIn(userEmail, userPassword);
     }
-
-    @GetMapping("/viewProfile")
+    @PutMapping("/profile/update")
+    public User updateProfile(@RequestBody UserUpdateRequest userUpdateRequest){
+        return userService.updateProfile(userUpdateRequest);
+    }
+    @GetMapping("/view/Profile")
     public Optional<User> viewProfile(@RequestParam Integer userId) {
         return userService.findById(userId);
     }

@@ -37,9 +37,6 @@ public class OrderServiceImpl implements OrderService {
                     order.setFoodItemId(orderRequest.getFoodItemId());
                     order.setRestaurantId(orderRequest.getRestaurantId());
                     order.setOrderStatus("Pending");
-                    getOrderByCustomerId(orderRequest.getCustomerId()).getFoodItemList().
-                            add(foodItemService.getFoodItemById(orderRequest.getRestaurantId(),
-                                    orderRequest.getFoodItemId()));
                     return orderRepository.save(order);
                 }else {
                     return new Order();
